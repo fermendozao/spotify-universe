@@ -10,16 +10,11 @@ function Footer() {
   return (
     <Wrapper>
       <section>
-        <FormattedMessage {...messages.licenseMessage} />
-      </section>
-      <section>
-        <LocaleToggle />
-      </section>
-      <section>
         <FormattedMessage
           {...messages.authorMessage}
           values={{
-            author: <A href="https://twitter.com/mxstbr">Max Stoiber</A>,
+            author1: <A href="https://twitter.com/fermendozao">Fernando Mendoza</A>,
+            author2: <A href="https://twitter.com/ali_mucino">Alejandra Muciño</A>
           }}
         />
       </section>
