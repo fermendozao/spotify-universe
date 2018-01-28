@@ -39,6 +39,40 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
     }
   }
 
+  /**
+   * Generates a random string containing numbers and letters
+   * @param  {number} length The length of the string
+   * @return {string} The generated string
+   */
+  generateRandomString = (length) => {
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+    for (let i = 0; i < length; i++) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  };
+
+  spotifyLogin = () => {
+    const clientId = '504500c3c4ea4c4483cfc72d8b9da193'; // Your client id
+    const redirectUri = 'http://localhost:3000/callback'; // Your redirect uri
+
+    const state = this.generateRandomString(16);
+
+    localStorage.setItem('spotify_auth_state', state);
+    const scope = 'user-read-private user-read-email';
+
+    let url = 'https://accounts.spotify.com/authorize';
+    url += '?response_type=token';
+    url += '&client_id=' + encodeURIComponent(clientId);
+    url += '&scope=' + encodeURIComponent(scope);
+    url += '&redirect_uri=' + encodeURIComponent(redirectUri);
+    url += '&state=' + encodeURIComponent(state);
+
+    window.location = url;
+  }
+
   render() {
     const { loading, error, repos } = this.props;
     const reposListProps = {
@@ -56,33 +90,13 @@ export class HomePage extends React.PureComponent { // eslint-disable-line react
         <div>
           <CenteredSection>
             <H2>
-              <FormattedMessage {...messages.startProjectHeader} />
+              <FormattedMessage {...messages.welcomeMessage} />
             </H2>
-            <p>
-              <FormattedMessage {...messages.startProjectMessage} />
-            </p>
+
+            <button onClick={this.spotifyLogin}>
+              Login with Spotify
+            </button>
           </CenteredSection>
-          <Section>
-            <H2>
-              <FormattedMessage {...messages.trymeHeader} />
-            </H2>
-            <Form onSubmit={this.props.onSubmitForm}>
-              <label htmlFor="username">
-                <FormattedMessage {...messages.trymeMessage} />
-                <AtPrefix>
-                  <FormattedMessage {...messages.trymeAtPrefix} />
-                </AtPrefix>
-                <Input
-                  id="username"
-                  type="text"
-                  placeholder="mxstbr"
-                  value={this.props.username}
-                  onChange={this.props.onChangeUsername}
-                />
-              </label>
-            </Form>
-            <ReposList {...reposListProps} />
-          </Section>
         </div>
       </article>
     );

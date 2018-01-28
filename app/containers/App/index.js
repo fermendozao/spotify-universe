@@ -13,6 +13,7 @@ import { Switch, Route } from 'react-router-dom';
 
 import HomePage from 'containers/HomePage/Loadable';
 import GalaxyPage from 'containers/GalaxyPage/Loadable';
+import CallbackPage from 'containers/Callback/Loadable';
 import NotFoundPage from 'containers/NotFoundPage/Loadable';
 import Header from 'components/Header';
 import Footer from 'components/Footer';
@@ -20,6 +21,17 @@ import Footer from 'components/Footer';
 import stars from './stars.png';
 import twinkling from './twinkling.png';
 import clouds from './clouds.png';
+
+import {
+  userIsAuthenticatedRedir,
+  userIsNotAuthenticatedRedir,
+  userIsAuthenticated,
+  userIsNotAuthenticated
+} from '../../auth';
+
+// Apply HOCs to avoid doing it inside render method
+const Home = userIsNotAuthenticatedRedir(HomePage);
+const Galaxy = userIsAuthenticatedRedir(GalaxyPage);
 
 const AppWrapper = styled.div`
   max-width: calc(768px + 16px * 2);
@@ -112,8 +124,9 @@ export default function App() {
       <div className="content-wrapper">
         <Header />
         <Switch>
-          <Route exact path="/" component={HomePage} />
-          <Route path="/my-galaxy" component={GalaxyPage} />
+          <Route exact path="/" component={Home} />
+          <Route path="/my-galaxy" component={Galaxy} />
+          <Route path="/callback" component={CallbackPage} />
           <Route path="" component={NotFoundPage} />
         </Switch>
         <Footer />
